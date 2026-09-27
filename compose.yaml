@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: skyshelf
+      POSTGRES_USER: skyshelf
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skyshelf"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    command: server /data --console-address ':9001'
+    environment:
+      MINIO_ROOT_USER: skyshelf
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:?Set MINIO_PASSWORD in .env}
+    volumes:
+      - minio-data:/data
+  backend:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: cloud
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://postgres:5432/skyshelf
+      DB_PASSWORD: ${DB_PASSWORD}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_PASSWORD: ${MINIO_PASSWORD}
+      SKYSHELF_MASTER_KEY: ${SKYSHELF_MASTER_KEY:?Set a Base64 encoded 32-byte key in .env}
+      APP_DEMO: 'true'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    restart: on-failure
+  frontend:
+    build: ./frontend
+    ports:
+      - '127.0.0.1:8088:80'
+    depends_on:
+      - backend
+volumes:
+  postgres-data:
+  minio-data:

@@ -1,0 +1,35 @@
+SkyShelf Final 1.0 — быстрый старт
+
+1. Установите полный JDK 17 или новее.
+2. Полностью распакуйте архив в отдельную папку.
+3. На Windows откройте start.bat двойным щелчком.
+4. Оставьте два окна SkyShelf открытыми.
+5. Скрипт сам дождётся запуска и откроет http://localhost:5500
+
+Основной демо-аккаунт:
+  demo@skyshelf.local
+  SkyShelfDemo2026!
+
+Дополнительные аккаунты:
+  team@skyshelf.local   — участник
+  reader@skyshelf.local — читатель
+  admin@skyshelf.local  — администратор
+
+Пароль участника и читателя: SkyShelfDemo2026!
+Пароль администратора: SkyShelfAdmin2026!
+
+Для остановки закройте оба серверных окна.
+Данные сохраняются в backend/data. Не удаляйте эту папку.
+
+Важно:
+- index.html двойным щелчком не запускает backend;
+- локальные ссылки открываются только на этом компьютере;
+- Maven, Node.js и Docker для готовой демонстрации не нужны;
+- если Java не находится, перезапустите VS Code/терминал после установки JDK.
+
+Подробности: README.md
+Проверки: docs/TESTING.md
+Безопасность: docs/SECURITY.md
+Figma: docs/FIGMA_HANDOFF.md
+
+macOS/Linux: bash start.sh
